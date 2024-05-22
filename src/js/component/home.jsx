@@ -1,24 +1,44 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState } from "react";
+import List from "./list";
 
 //create your first component
-const Home = () => {
+export const Home = () => {
+
+
+		const [tasks, setTasks] = useState ([]);
+		const [input, setInput] = useState ("");
+
+//handle input change
+ const handleInputChange = (e) => {setInput(e.target.value)};
+
+//add task
+const addTask = () => {
+	if (input){
+		setTasks([...tasks, input]);
+		setInput("");
+	}
+};
+
+//remove task
+const removeTask = (index) => {
+	const newTasks = tasks.filter((_, i) => i !== index);
+	setTasks(newTasks);
+};
+
+const handleKeyPress = (e) => {
+	if(e.key === 'Enter'){
+		addTask();
+	}
+};
+
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="container">
+			<h2>To Do List</h2>
+			<div className="inputContainer">
+				<input type="text" value={input} onChange={handleInputChange} onKeyDown={handleKeyPress}/>
+				<button onClick={addTask}>Input</button>
+			</div>
+			<List tasks={tasks} removeTask={removeTask}/>
 		</div>
 	);
 };
